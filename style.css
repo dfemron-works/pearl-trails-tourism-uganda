@@ -1,0 +1,559 @@
+/* Theme Variables */
+:root {
+  --bg-dark: #0b1310;
+  --bg-surface: #13201b;
+  --bg-surface-hover: #192b24;
+  --border-color: #ffffff;
+  --accent-neon: #00f59b;
+  --accent-neon-soft: rgba(0, 245, 155, 0.14);
+  --text-light: #f0fdf4;
+  --text-muted: #9eb3aa;
+  --danger-neon: #ff4d6d;
+  --warn-neon: #ffb703;
+}
+
+/* Base Layout with Fading Neon Radial Gradient */
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  background-color: var(--bg-dark);
+  background-image:
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(0, 245, 155, 0.12) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 85% 85%,
+      rgba(0, 245, 155, 0.08) 0%,
+      transparent 50%
+    ),
+    linear-gradient(180deg, #0b1310 0%, #070d0b 100%);
+  background-attachment: fixed;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+
+/* Header & Navigation Bar */
+header {
+  background: rgba(19, 32, 27, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 30px;
+  min-height: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+header strong {
+  font-size: 20px;
+  letter-spacing: 0.6px;
+  color: var(--accent-neon);
+  text-shadow: 0 0 12px rgba(0, 245, 155, 0.35);
+  padding: 14px 0;
+}
+
+header nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Navigation Tabs with Fading Neon Accent Hover & Active Highlight */
+header nav a {
+  position: relative;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 19px 15px;
+  font-weight: 600;
+  font-size: 14px;
+  transition:
+    color 0.25s ease,
+    background 0.3s ease;
+}
+
+header nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--accent-neon);
+  box-shadow: 0 0 10px var(--accent-neon);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+
+header nav a:hover,
+header nav a.active {
+  color: var(--accent-neon);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--accent-neon-soft) 100%
+  );
+}
+
+header nav a:hover::after,
+header nav a.active::after {
+  transform: scaleX(1);
+}
+
+/* Main Container & Split Grids */
+.container {
+  max-width: 1140px;
+  margin: 30px auto;
+  padding: 28px;
+  background: rgba(19, 32, 27, 0.85);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+/* PACKAGES / TIERS & SPLIT CARDS */
+.tier-card,
+.card,
+.kpi-card,
+.review-box,
+.photo-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 40px 30px;
+  text-align: center;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background-color 0.3s ease;
+}
+
+.card,
+.kpi-card,
+.review-box,
+.photo-card {
+  padding: 20px;
+  text-align: left;
+}
+
+.tier-card:hover,
+.card:hover,
+.kpi-card:hover,
+.review-box:hover,
+.photo-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-neon);
+  background: linear-gradient(
+    180deg,
+    var(--bg-surface-hover) 0%,
+    var(--bg-surface) 100%
+  );
+  box-shadow: 0 10px 28px rgba(0, 245, 155, 0.15);
+}
+
+.tier-card.popular {
+  border-color: var(--accent-neon);
+  position: relative;
+  box-shadow: 0 0 22px rgba(0, 245, 155, 0.12);
+}
+
+.tier-card.popular::before {
+  content: "MOST POPULAR";
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent-neon);
+  color: var(--bg-dark);
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 245, 155, 0.5);
+}
+
+.price {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 20px 0;
+  color: var(--text-light);
+}
+
+.price span {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.tier-features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 30px;
+  color: var(--text-muted);
+  text-align: left;
+}
+
+.tier-features li {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.tier-features li::before {
+  content: "✓";
+  color: var(--accent-neon);
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+/* Tables & Row Hover Accents */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background: var(--bg-surface);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th,
+td {
+  border: 1px solid var(--border-color);
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background: #192b24;
+  color: var(--accent-neon);
+  font-weight: 600;
+}
+
+tbody tr:hover,
+table tr:not(:first-child):hover {
+  background-color: var(--accent-neon-soft);
+}
+
+/* Form Inputs */
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  margin: 6px 0 14px;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-sizing: border-box;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent-neon);
+  box-shadow: 0 0 0 3px rgba(0, 245, 155, 0.2);
+}
+
+/* Neon Accent Buttons */
+button,
+.btn {
+  background: var(--accent-neon);
+  color: var(--bg-dark);
+  padding: 10px 18px;
+  border: 1px solid var(--accent-neon);
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 700;
+  font-size: 14px;
+  transition:
+    background 0.25s ease,
+    transform 0.15s ease,
+    box-shadow 0.25s ease,
+    color 0.25s ease;
+}
+
+button:hover,
+.btn:hover {
+  background: transparent;
+  color: var(--accent-neon);
+  transform: translateY(-2px);
+  box-shadow: 0 0 16px rgba(0, 245, 155, 0.4);
+}
+
+button:active,
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-danger {
+  background: var(--danger-neon);
+  border-color: var(--danger-neon);
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: transparent;
+  color: var(--danger-neon);
+  box-shadow: 0 0 14px rgba(255, 77, 109, 0.4);
+}
+
+.btn-edit {
+  background: var(--warn-neon);
+  border-color: var(--warn-neon);
+  color: var(--bg-dark);
+}
+
+.btn-edit:hover {
+  background: transparent;
+  color: var(--warn-neon);
+  box-shadow: 0 0 14px rgba(255, 183, 3, 0.4);
+}
+
+/* Alerts */
+.alert {
+  padding: 12px 15px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  background: var(--accent-neon-soft);
+  color: var(--accent-neon);
+  border-left: 4px solid var(--accent-neon);
+}
+
+.error {
+  background: rgba(255, 77, 109, 0.14);
+  color: var(--danger-neon);
+  border-left-color: var(--danger-neon);
+}
+/* ANIMATED PROMOTIONAL OFFER BADGES */
+.tier-card.on-offer {
+  border-color: #ff4d6d;
+  position: relative;
+  box-shadow: 0 0 24px rgba(255, 77, 109, 0.18);
+}
+
+.offer-badge {
+  position: absolute;
+  top: -14px;
+  right: 18px;
+  background: linear-gradient(135deg, #ff4d6d 0%, #ffb703 100%);
+  color: #0b1310;
+  font-weight: 800;
+  font-size: 0.82rem;
+  padding: 6px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.6px;
+  box-shadow: 0 0 16px rgba(255, 77, 109, 0.7);
+  animation: pulseOffer 1.8s infinite ease-in-out;
+  z-index: 5;
+}
+
+@keyframes pulseOffer {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    box-shadow: 0 0 12px rgba(255, 77, 109, 0.6);
+  }
+  50% {
+    transform: scale(1.09) rotate(-2deg);
+    box-shadow: 0 0 24px rgba(255, 183, 3, 0.95);
+  }
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.nav-offer-btn {
+  color: #ffb703 !important;
+}
+/* Site Copyright Footer - Centered */
+.site-footer {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 40px;
+  padding: 24px 20px;
+  background: rgba(19, 32, 27, 0.95);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.footer-content {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-content p {
+  margin: 4px 0;
+  text-align: center;
+}
+
+.site-footer strong {
+  color: var(--accent-neon);
+}
+
+.site-footer .footer-sub {
+  font-size: 12.5px;
+}
+
+.site-footer a {
+  color: var(--accent-neon);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.site-footer a:hover {
+  color: #ffb703;
+  text-decoration: underline;
+}
+/* ==========================================================================
+   OFFICIAL PRINT LETTERHEAD & FOOTER STYLING (Inventory, Finances & Reports)
+   ========================================================================== */
+@media print {
+  /* 1. Keep Top Land Cruiser Banner & Company Title as Official Letterhead */
+  .top-safari-header-strip {
+    display: flex !important;
+    background: #f8f9fa !important;
+    border: 2px solid #1b4332 !important;
+    border-radius: 8px !important;
+    margin-bottom: 16px !important;
+    padding: 10px 16px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .brand-title-box {
+    background: transparent !important;
+    border-right: 2px solid #1b4332 !important;
+  }
+  .brand-title-box strong {
+    color: #1b4332 !important;
+  }
+  .brand-title-box small {
+    color: #8c6239 !important;
+  }
+  .savanna-runway {
+    background: #eef6f1 !important;
+    border: 1px solid #1b4332 !important;
+  }
+  .cruiser-hero-rig {
+    animation: none !important;
+    right: 24px !important;
+  }
+
+  /* 2. Keep Bottom Footer & Copyright Markers Visible */
+  .site-footer {
+    display: block !important;
+    margin-top: 24px !important;
+    padding-top: 10px !important;
+    border-top: 2px solid #1b4332 !important;
+    background: transparent !important;
+    color: #111111 !important;
+    text-align: center !important;
+    font-size: 12px !important;
+  }
+  .site-footer p,
+  .site-footer strong,
+  .site-footer a {
+    color: #111111 !important;
+    text-decoration: none !important;
+  }
+
+  /* 3. Hide Navigation Menu, Buttons, Input Forms, Action Columns & Floating Widgets */
+  header,
+  nav,
+  .no-print,
+  button,
+  .btn,
+  form,
+  #safariChatToggle,
+  #safariChatBox,
+  #settingsModal,
+  #signLanguageBar,
+  #adminAlertDrawer,
+  #liveAlertToast {
+    display: none !important;
+  }
+
+  /* 4. Clean White-Paper Table, Statement & KPI Card Styling */
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .card,
+  .kpi-card,
+  .stmt-box {
+    background: #ffffff !important;
+    border: 1px solid #444 !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+  }
+  .kpi-card p,
+  .kpi-card h4,
+  .kpi-card small,
+  h2,
+  h3,
+  h4 {
+    color: #000000 !important;
+  }
+  table,
+  th,
+  td {
+    border: 1px solid #444 !important;
+    color: #000000 !important;
+    background: #ffffff !important;
+  }
+  th,
+  .stmt-section td {
+    background: #e9ecef !important;
+    font-weight: bold !important;
+    color: #000000 !important;
+  }
+  .stmt-total td {
+    background: #dce8e1 !important;
+    font-weight: bold !important;
+    color: #1b4332 !important;
+  }
+  .cat-pill,
+  .badge {
+    border: 1px solid #333 !important;
+    background: #f8f9fa !important;
+    color: #000000 !important;
+  }
+}
