@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pearl Trails Mobile Companion App (Android / iOS)</title>
+    <link rel="manifest" href="manifest.json" />
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #0b1310;
+        color: #f0fdf4;
+      }
+      .app-bar {
+        background: #13201b;
+        border-bottom: 2px solid #00f59b;
+        padding: 14px 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .app-bar strong {
+        color: #00f59b;
+        font-size: 16px;
+      }
+      .container {
+        max-width: 520px;
+        margin: 16px auto;
+        padding: 0 14px;
+      }
+      .card {
+        background: #13201b;
+        border: 1px solid #243b32;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 14px;
+      }
+      h3 {
+        margin: 0 0 10px;
+        color: #00f59b;
+        font-size: 15px;
+      }
+      input,
+      select,
+      button {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 8px;
+        border-radius: 8px;
+        border: 1px solid #243b32;
+        background: #0b1310;
+        color: #f0fdf4;
+        font-size: 14px;
+      }
+      button {
+        background: #00f59b;
+        color: #0b1310;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+      }
+      .result-box {
+        background: #0b1310;
+        border-left: 4px solid #ffb703;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        white-space: pre-line;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-bar">
+      <strong>🦁 Pearl Trails Mobile Companion</strong>
+      <a
+        href="index.php"
+        style="color: #ffb703; text-decoration: none; font-size: 13px"
+        >Web Portal ↗</a
+      >
+    </div>
+
+    <div class="container">
+      <!-- 1. Field Guide QR E-Ticket Verifier (Consumes api.php?resource=verify_ticket) -->
+      <div class="card">
+        <h3>🎟️ Field Guide: Verify Tourist E-Ticket</h3>
+        <input
+          type="number"
+          id="ticketIdInput"
+          placeholder="Enter Booking / Ticket ID (e.g., 1)"
+        />
+        <button type="button" onclick="verifyTicket()">
+          Verify Boarding Pass
+        </button>
+        <div id="ticketResult" class="result-box" style="display: none"></div>
+      </div>
+
+      <!-- 2. Instant MTN MoMo / Airtel Money Prompt Simulator (Triggers payment_webhook.php) -->
+      <div class="card">
+        <h3>📱 Mobile Money PIN Prompt &amp; Auto-Confirm</h3>
+        <input
+          type="number"
+          id="momoBookingId"
+          placeholder="Booking ID to Confirm"
+        />
+        <select id="momoProvider">
+          <option value="MTN_MOMO">MTN Mobile Money Uganda</option>
+          <option value="AIRTEL_MONEY">Airtel Money Uganda</option>
+        </select>
+        <input
+          type="text"
+          id="momoPhone"
+          placeholder="Customer Phone (e.g., 256772845910)"
+        />
+        <input
+          type="number"
+          id="momoAmount"
+          placeholder="Amount in UGX (e.g., 550000)"
+        />
+        <button type="button" onclick="simulateMobileMoney()">
+          Approve PIN &amp; Send Webhook
+        </button>
+        <div id="momoResult" class="result-box" style="display: none"></div>
+      </div>
+
+      <!-- 3. Live Safari Packages & Weather Feed (Consumes api.php) -->
+      <div class="card">
+        <h3>🌦️ Park Weather &amp; Safari Rates (REST API)</h3>
+        <button type="button" onclick="loadMobileFeed()">
+          Refresh Live API Feed
+        </button>
+        <div id="feedResult" class="result-box" style="margin-top: 8px">
+          Tap "Refresh Live API Feed" to load packages &amp; weather...
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API_KEY = "PT_UG_2026_LIVE_API_98421";
+      const WEBHOOK_SECRET = "PT_UG_MOMO_AIRTEL_SECRET_2026";
+
+      function verifyTicket() {
+        const id = document.getElementById("ticketIdInput").value;
+        const out = document.getElementById("ticketResult");
+        out.style.display = "block";
+        out.textContent = "Checking E-Ticket...";
+
+        fetch(
+          `api.php?resource=verify_ticket&booking_id=${encodeURIComponent(id)}&api_key=${API_KEY}`,
+        )
+          .then((r) => r.json())
+          .then((res) => {
+            if (res.success && res.data) {
+              const d = res.data;
+              out.textContent = `✅ VALID PASS #${d.booking_id}\nTourist: ${d.tourist_name}\nSafari: ${d.package_title}\nDate: ${d.travel_date} (${d.num_guests} Guests)\nStatus: ${d.status}`;
+            } else {
+              out.textContent = `❌ ${res.message}`;
+            }
+          })
+          .catch(() => {
+            out.textContent = "Offline mode: Unable to reach live server.";
+          });
+      }
+
+      function simulateMobileMoney() {
+        const out = document.getElementById("momoResult");
+        out.style.display = "block";
+        out.textContent = "Processing Mobile Money Callback...";
+
+        const payload = {
+          provider: document.getElementById("momoProvider").value,
+          externalId: document.getElementById("momoBookingId").value,
+          msisdn: document.getElementById("momoPhone").value,
+          amount: document.getElementById("momoAmount").value,
+          currency: "UGX",
+          status: "SUCCESSFUL",
+        };
+
+        fetch(`payment_webhook.php?secret=${WEBHOOK_SECRET}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        })
+          .then((r) => r.json())
+          .then((res) => {
+            out.textContent =
+              res.status === "accepted"
+                ? `✅ ${payload.provider} Confirmed!\nBooking #${res.booking_id} is now ${res.booking_status}.\nRef: ${res.transaction_ref}`
+                : `⚠️ ${res.message}`;
+          })
+          .catch(() => {
+            out.textContent = "Network error sending webhook.";
+          });
+      }
+
+      function loadMobileFeed() {
+        const out = document.getElementById("feedResult");
+        out.textContent = "Syncing with Pearl Trails REST API...";
+        Promise.all([
+          fetch(
+            `api.php?resource=weather&place=Bwindi&api_key=${API_KEY}`,
+          ).then((r) => r.json()),
+          fetch(`api.php?resource=packages&api_key=${API_KEY}`).then((r) =>
+            r.json(),
+          ),
+        ])
+          .then(([wx, pkgs]) => {
+            let lines = [];
+            if (wx.success) {
+              lines.push(
+                `🌦️ ${wx.data.location}: ${wx.data.temp_c}°C (${wx.data.condition})`,
+              );
+            }
+            if (pkgs.success && Array.isArray(pkgs.data)) {
+              lines.push("\n🦁 Active Safari Packages:");
+              pkgs.data.slice(0, 4).forEach((p) => {
+                lines.push(
+                  `• ${p.title} (${p.duration_days}D) — $${p.price_usd}`,
+                );
+              });
+            }
+            out.textContent = lines.join("\n");
+          })
+          .catch(() => {
+            out.textContent = "Offline: Showing cached data.";
+          });
+      }
+    </script>
+  </body>
+</html>

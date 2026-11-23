@@ -227,6 +227,7 @@ $isOffersView = ($currentPage === 'index.php' && isset($_GET['offers']) && $_GET
                 <a href="reviews.php" class="<?= $currentPage === 'reviews.php' ? 'active' : '' ?>">Feedback</a>
                 <a href="about.php" class="<?= $currentPage === 'about.php' ? 'active' : '' ?>">About Us</a>
                 <a href="weather_geography.php" class="<?= $currentPage === 'weather_geography.php' ? 'active' : '' ?>">🌦️ Weather &amp; Geo</a>
+                <a href="mobile_app.html" class="<?= $currentPage === 'mobile_app.html' ? 'active' : '' ?>" style="border-color: #ffb703; color: #ffb703;">📱 Mobile App</a>
 
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <?php if ($_SESSION['role'] === 'admin'): ?>
