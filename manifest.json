@@ -1,0 +1,16 @@
+﻿{
+  "name": "Pearl Trails Tours & Travel Uganda Ltd",
+  "short_name": "Pearl Trails UG",
+  "description": "Offline-Ready Safari Management, GIS Route Mapping & E-Ticket Companion App",
+  "start_url": "index.php",
+  "display": "standalone",
+  "background_color": "#0b1310",
+  "theme_color": "#00f59b",
+  "icons": [
+    {
+      "src": "https://flaticon.com",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
